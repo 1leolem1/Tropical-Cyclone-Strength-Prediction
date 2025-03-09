@@ -13,7 +13,18 @@ def clean_data(df):
     return df
 
 
+def get_storms_speed(df):
+    for storm in df['SID'].unique():
+        pass
+    
+    return df['SID'].unique()
+
+
+
 # code 
 
 df = read_data(file_loc)
 df = clean_data(df)
+
+
+    
