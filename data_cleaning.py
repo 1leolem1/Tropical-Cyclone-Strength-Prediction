@@ -14,10 +14,12 @@ def clean_data(df):
 
 
 def get_storms_speed(df):
-    for storm in df['SID'].unique():
-        pass
+    """with all lines of  the df, calculates a speed of movement of the storm"""
     
-    return df['SID'].unique()
+    for storm in df['SID'].unique():
+        storm
+    
+    return 0
 
 
 
@@ -26,5 +28,5 @@ def get_storms_speed(df):
 df = read_data(file_loc)
 df = clean_data(df)
 
-
     
+print(df.head())
