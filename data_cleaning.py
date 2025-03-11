@@ -43,10 +43,41 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 
+
+def create_storm_speed_feature(df):
+
+    """
+    DEPENDS ON haversine() function
+    """
+
+
+    df['LAT'] = df['LAT'].astype(float)
+    df['LON'] = df['LON'].astype(float)
+
+
+    df = df.sort_values(['SID', 'ISO_TIME']).reset_index(drop=True)
+    df['LAT_PREV']       = df['LAT'].shift(1)
+    df['LON_PREV']       = df['LON'].shift(1)
+    df['ISO_TIME_PREV']  = df['ISO_TIME'].shift(1)
+    df['is_first_measure'] = df['SID'].ne(df['SID'].shift())
+    df['STORM_SPEED'] = 0.0
+
+    for idx, row in df.iterrows():
+        if row['is_first_measure']:
+            continue
+        else:
+            dist = haversine(row['LAT'], row['LON'],
+                             row['LAT_PREV'], row['LON_PREV'])
+            time_delta = (row['ISO_TIME'] - row['ISO_TIME_PREV']).total_seconds() / 3600.0
+            speed = dist / time_delta if time_delta != 0 else 0.0
+            df.at[idx, 'STORM_SPEED'] = speed
+    return df
+
+
 # code 
 
 df = read_data(file_loc)
 df = clean_data(df)
-
-
+df  = create_storm_speed_feature(df)
+print(df['STORM_SPEED'].head())
 # print(df.head())
