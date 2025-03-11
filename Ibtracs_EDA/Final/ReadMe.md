@@ -12,6 +12,7 @@ affine==2.4.0
 asttokens==3.0.0
 attrs==25.1.0
 branca==0.8.1
+Cartopy==0.24.1
 certifi==2025.1.31
 charset-normalizer==3.4.1
 click==8.1.8
@@ -47,6 +48,7 @@ MarkupSafe==3.0.2
 matplotlib==3.10.0
 matplotlib-inline==0.1.7
 mercantile==1.2.1
+missingno==0.5.2
 narwhals==1.25.0
 nest-asyncio==1.6.0
 numpy==2.2.2
@@ -63,6 +65,7 @@ Pygments==2.19.1
 pyogrio==0.10.0
 pyparsing==3.2.1
 pyproj==3.7.0
+pyshp==2.3.1
 python-dateutil==2.9.0.post0
 pytz==2025.1
 pywin32==308
@@ -84,3 +87,4 @@ urllib3==2.3.0
 wcwidth==0.2.13
 widgetsnbextension==4.0.13
 xyzservices==2025.1.0
+
