@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import missingno as msno
 import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+
 
 #------------FUNCTIONS------------
 def string_to_date(file_path):
@@ -203,6 +205,99 @@ def final_data_cleaning(df):
 
     return df
 
+# Souha's transformations 
+
+def fill_missing_values (df):
+
+  columns_to_fill = ['LANDFALL' , 'USA_LAT', 'USA_LON', 'TD9636_LAT', 'TD9636_LON', 'STORM_SPEED', 'STORM_DIR', 'WMO_WIND_ADJUSTED_COMPLETED']
+
+  # Calculate the mean for each column, ignoring NaNs
+  for col in columns_to_fill:
+    mean_val = df[col].mean()
+    df[col] = df[col].fillna(mean_val)
+    #print(f"Mean of {col} : {mean_val}")
+  return df 
+
+def replace_stringvalues_to_numerique (df):
+  
+  # Create a LabelEncoder object
+  le = LabelEncoder()
+
+  # Fit the encoder on the unique values in the 'IFLAG' column
+  le.fit(df['IFLAG'].unique())
+
+  # Transform the 'IFLAG' column to numerical categories
+  df['IFLAG_numerical'] = le.transform(df['IFLAG'])
+  iflag_dict = df[['IFLAG', 'IFLAG_numerical']]
+  df = df.drop('IFLAG', axis=1)
+  return df 
+
+def split_dates(df):
+  # Convert 'ISO_TIME' and 'start_date' to datetime objects if they aren't already
+  df['ISO_TIME'] = pd.to_datetime(df['ISO_TIME'])
+  df['start_date'] = pd.to_datetime(df['start_date'])
+
+  # Extract year, month, day, hour, and minute from 'ISO_TIME'
+  df['ISO_YEAR'] = df['ISO_TIME'].dt.year
+  df['ISO_MONTH'] = df['ISO_TIME'].dt.month
+  df['ISO_DAY'] = df['ISO_TIME'].dt.day
+  df['ISO_HOUR'] = df['ISO_TIME'].dt.hour
+  df['ISO_MINUTE'] = df['ISO_TIME'].dt.minute
+
+  # Extract year, month, day, hour, and minute from 'start_date'
+  df['START_YEAR'] = df['start_date'].dt.year
+  df['START_MONTH'] = df['start_date'].dt.month
+  df['START_DAY'] = df['start_date'].dt.day
+  df['START_HOUR'] = df['start_date'].dt.hour
+  df['START_MINUTE'] = df['start_date'].dt.minute
+  return df
+
+def onehotencoder_basin(df):
+
+  # One-hot encode the 'BASIN' column
+  basin_encoded = pd.get_dummies(df['BASIN'], prefix='BASIN')
+
+  # Concatenate the one-hot encoded columns with the original DataFrame
+  df = pd.concat([df, basin_encoded], axis=1)
+
+  # Drop the original 'BASIN' column (optional)
+  df = df.drop('BASIN', axis=1)
+  return df 
+
+def onehotencoder_nature(df):  
+  # One-hot encode the 'NATURE' column
+  nature_encoded = pd.get_dummies(df['NATURE'], prefix='NATURE')
+
+  # Concatenate the one-hot encoded columns with the original DataFrame
+  df = pd.concat([df, nature_encoded], axis=1)
+
+  # Drop the original 'NATURE' column (optional)
+  df = df.drop('NATURE', axis=1)
+  return df 
+
+def onehotencoder_tracktype(df):
+  # One-hot encode the 'TRACK_TYPE' column
+  track_type_encoded = pd.get_dummies(df['TRACK_TYPE'], prefix='TRACK_TYPE')
+
+  # Concatenate the one-hot encoded columns with the original DataFrame
+  df = pd.concat([df, track_type_encoded], axis=1)
+
+  # Drop the original 'TRACK_TYPE' column (optional)
+  df = df.drop('TRACK_TYPE', axis=1)
+  return df
+
+def bool_to_int(df):
+    # Replace True with 1 and False with 0 in all boolean columns
+  for col in df.columns:
+      if df[col].dtype == 'bool':
+          df[col] = df[col].astype(int)
+  return df
+
+
+
+
+
+
 #------------MAIN EXCUTION------------
 if __name__=="__main__":
     file_path = "./data/ibtracs.csv" 
@@ -233,6 +328,15 @@ if __name__=="__main__":
     
     # Final data cleaning
     df = final_data_cleaning(df)
+
+    # Apply Souha's transformations
+    df = fill_missing_values(df)
+    df = replace_stringvalues_to_numerique(df)
+    df = split_dates(df)
+    df = onehotencoder_basin(df)
+    df = onehotencoder_nature(df)
+    df = onehotencoder_tracktype(df)
+    df = bool_to_int(df)
 
     # Save the cleaned dataframe
     save_df(df)
