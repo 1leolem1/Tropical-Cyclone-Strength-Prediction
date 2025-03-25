@@ -75,5 +75,7 @@ traitlets==5.14.3
 tzdata==2025.1
 urllib3==2.3.0
 wcwidth==0.2.13
+wheel==0.45.1
 widgetsnbextension==4.0.13
+xgboost==3.0.0
 xyzservices==2025.1.0
