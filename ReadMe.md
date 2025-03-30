@@ -15,3 +15,5 @@ Some cells may take several minutes to fully run depending on your computer spec
 You will find in the spacial analysis of the dataset, an interractive map. You can play along with it, it retrace the storms we are intered in during the analysis of our data set. A slider is provided to choose a period of time.
 
 We'll now leave you to enjoy reading this notebook, and hope that you'll be safe in case a storm starts.
+
+In order to run the web app, please run "app.py". A randomized sample file is provided in the data folder of this repository. You can also use the blank one in the same folder in order to fill it manually.
