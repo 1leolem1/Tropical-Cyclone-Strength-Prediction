@@ -53,7 +53,7 @@ def apply_wind_conversion(row):
 
 def read_data(data):
     df = pd.read_csv(data)
-    col_for_predict = ['SID','USA_SSHS', 'NATURE', 'LON', 'LAT', 'DIST2LAND', 'STORM_SPEED', 'BASIN',
+    col_for_predict = ['USA_SSHS', 'NATURE', 'LON', 'LAT', 'DIST2LAND', 'STORM_SPEED', 'BASIN',
                         'WMO_WIND','WMO_AGENCY','ISO_TIME','IFLAG',"TD9636_WIND"]
     
 
@@ -161,9 +161,8 @@ with tabs[1]:
                     st.subheader("📊 Prediction Results")  
                     st.write("Here are the predicted cyclone severity levels for your dataset:")
                     st.dataframe(
-                        data[['SID','LON','LAT','start_date','age_hours','Prediction']],
+                        data[[,'LON','LAT','start_date','age_hours','Prediction']],
                         column_config={
-                            "SID": "🌪️ Storm ID",
                             "LON": '📍 Longitude',
                             "LAT": '📍 Latitude',
                             'start_date' : "📅 Start Date",
