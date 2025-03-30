@@ -18,6 +18,18 @@ model = load_model()
 
 def read_data(data):
     df = pd.read_csv(data)
+
+    df['SEASON'] = pd.to_numeric(df['SEASON'], errors='coerce')
+    df['ISO_TIME'] = pd.to_datetime(df['ISO_TIME'], errors='coerce')
+    df['YEAR'] = df['ISO_TIME'].dt.year
+    df['MONTH'] = df['ISO_TIME'].dt.month
+    df['start_month'] = df.groupby('SID')['ISO_TIME'].transform('min').dt.month
+    df['WMO_WIND'] = pd.to_numeric(df['WMO_WIND'], errors='coerce')
+    df['LAT'] = pd.to_numeric(df['LAT'], errors='coerce')
+    df['LON'] = pd.to_numeric(df['LON'], errors='coerce')
+    df['DIST2LAND'] = pd.to_numeric(df['DIST2LAND'], errors='coerce')
+    df.replace(to_replace=" ", value=pd.NA, inplace=True)
+
     return df
 
 # Streamlit Interface 
