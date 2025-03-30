@@ -10,7 +10,7 @@ from io import BytesIO
 ## Fonctions array 
 
 def load_model():
-    MODEL_PATH = "model_xgboost.pkl"  
+    MODEL_PATH = "final_model.pkl"  
     model = joblib.load(MODEL_PATH)  
     return model
 
