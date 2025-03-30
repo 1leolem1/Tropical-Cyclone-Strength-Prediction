@@ -16,61 +16,8 @@ def load_model():
 
 model = load_model()
 
-
-def determine_averaging_period(agency):
-    mapping = {
-        'hurdat_atl': '1min',
-        'hurdat_epa': '1min',
-        'cphc': '1min',
-        'tokyo': '10min',
-        'newdelhi': '3min',
-        'reunion': '10min',
-        'bom': '10min',
-        'nadi': '10min',
-        'wellington': '10min'
-    }
-    return mapping.get(agency, '10min')  
-
-
-def apply_wind_conversion(row):
-    dist = row['DIST2LAND']
-    wind_speed = row['WMO_WIND']
-    agency = row['WMO_AGENCY']
-
-    
-    avg_period = determine_averaging_period(agency)
-
-    
-    if dist > 20:
-        exposure_ratios = {'1min': 1, '3min': 1, '10min': 1.05}
-    elif dist<= 1:
-        exposure_ratios = {'1min': 1, '3min': 1.10, '10min': 1.16}
-    else:
-        exposure_ratios = {'1min': 1, '3min': 1.05, '10min': 1.11}
-
-    return wind_speed * exposure_ratios[avg_period]
-
-
 def read_data(data):
     df = pd.read_csv(data)
-    col_for_predict = ['USA_SSHS', 'NATURE', 'LON', 'LAT', 'DIST2LAND', 'STORM_SPEED', 'BASIN',
-                        'WMO_WIND','WMO_AGENCY','ISO_TIME','IFLAG',"TD9636_WIND"]
-    
-
-    df = df[col_for_predict]
-    df["ISO_TIME"] = pd.to_datetime(df["ISO_TIME"], errors="coerce")
-    df["DIST2LAND"] = pd.to_numeric(df["DIST2LAND"], errors="coerce")
-    df["WMO_WIND"] = pd.to_numeric(df["WMO_WIND"], errors="coerce")
-    df['NATURE'] = df['NATURE'].astype('category')
-    df['BASIN'] = df['BASIN'].astype('category')
-    
-
-
-    df['start_date'] = df.groupby('SID')['ISO_TIME'].transform('min')
-    df['start_date'] = pd.to_datetime(df['start_date'])
-    df['age_hours'] = (df['ISO_TIME'] - df['start_date']).dt.total_seconds() / 3600
-    df['WMO_WIND_ADJUSTED'] = df.apply(apply_wind_conversion, axis=1)
-    df['WMO_WIND_ADJUSTED_COMPLETED'] = df['WMO_WIND_ADJUSTED'].fillna(df['TD9636_WIND'])
     return df
 
 # Streamlit Interface 
