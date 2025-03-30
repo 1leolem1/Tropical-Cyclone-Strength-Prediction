@@ -22,6 +22,8 @@ def read_data(data):
     df['LAT'] = pd.to_numeric(df['LAT'], errors='coerce')
     df['LON'] = pd.to_numeric(df['LON'], errors='coerce')
     df['DIST2LAND'] = pd.to_numeric(df['DIST2LAND'], errors='coerce')
+    df['BASIN'] = df['BASIN'].astype('category')
+    df['NATURE'] = df['NATURE'].astype('category')
     df.replace(to_replace=" ", value=pd.NA, inplace=True)
 
     return df
