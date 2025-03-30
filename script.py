@@ -116,11 +116,10 @@ with tabs[1]:
                     st.subheader("📊 Prediction Results")  
                     st.write("Here are the predicted cyclone severity levels for your dataset:")
                     st.dataframe(
-                        data[['LON','LAT','start_date','age_hours','Prediction']],
+                        data[['LON','LAT','age_hours','Prediction']],
                         column_config={
                             "LON": '📍 Longitude',
                             "LAT": '📍 Latitude',
-                            'start_date' : "📅 Start Date",
                             'age_hours' : st.column_config.NumberColumn(
                                                                 "⏳ Age",
                                                                 help="The age of the storm",
@@ -167,7 +166,6 @@ with tabs[2]:
         # Ajout des marqueurs
         for _, row in data.iterrows():
             lat, lon = row["LAT"], row["LON"]
-            start_date = row["start_date"]
             age_hours = row["age_hours"]
             intensity = row["Prediction"]
 
@@ -183,7 +181,7 @@ with tabs[2]:
                 fill=True,
                 fill_color=color,
                 fill_opacity=0.7,
-                popup=f"<b>Date:</b> {start_date}<br><b>Age:</b> {age_hours} hours<br><b>Intensity:</b> {intensity}⭐"
+                popup=f"<b>Age:</b> {age_hours} hours<br><b>Intensity:</b> {intensity}⭐"
             ).add_to(m)
 
         # Affichage de la carte
