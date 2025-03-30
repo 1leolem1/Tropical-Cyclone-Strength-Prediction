@@ -161,7 +161,7 @@ with tabs[1]:
                     st.subheader("📊 Prediction Results")  
                     st.write("Here are the predicted cyclone severity levels for your dataset:")
                     st.dataframe(
-                        data[[,'LON','LAT','start_date','age_hours','Prediction']],
+                        data[['LON','LAT','start_date','age_hours','Prediction']],
                         column_config={
                             "LON": '📍 Longitude',
                             "LAT": '📍 Latitude',
